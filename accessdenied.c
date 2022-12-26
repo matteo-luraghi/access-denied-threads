@@ -11,18 +11,18 @@ int TRIES = 2500;
 char pssw1[20] = "Hunter2";
 
 typedef char data;
-struct nodo {
+struct node {
     data el;
-    struct nodo *next;
+    struct node *next;
 };
 
-typedef struct nodo *lista;
+typedef struct node *list;
 
-int lunghezza(lista l);
-lista inserisci_testa (lista l, data el);
-lista inserisci_coda (lista l, data el);
-void stampa_lista (lista l);
-int conta_lista (lista l);
+int length(list l);
+list insert_head (list l, data el);
+list insert_tail (list l, data el);
+void print_list (list l);
+int count_list (list l);
 
 int updateChar(char charact);
 
@@ -42,30 +42,30 @@ int main() {
     return 0;
 }
 
-int lunghezza(lista l) {
+int length(list l) {
     if (l==NULL) { return 0;}
-    else {return 1 + lunghezza (l->next);}
+    else {return 1 + length (l->next);}
 }
 
-lista inserisci_testa (lista l, data el) {
-    struct nodo *temp = malloc(sizeof(struct nodo));
+list insert_head (list l, data el) {
+    struct node *temp = malloc(sizeof(struct node));
     temp->el = el;
     temp->next = l;
     return temp;
 }
 
-lista inserisci_coda (lista l, data el) {
-    if (l == NULL) {return inserisci_testa(l,el);}
+list insert_tail (list l, data el) {
+    if (l == NULL) {return insert_head(l,el);}
     else {
-        l->next = inserisci_coda(l->next,el);
+        l->next = insert_tail(l->next,el);
         return l;
     }
 }
 
-void stampa_lista (lista l) {
+void print_list (list l) {
     if(l != NULL) {
         printf("%c",l->el);
-        stampa_lista(l->next);
+        print_list(l->next);
     }
     else {printf("\n");}
 }
@@ -112,13 +112,13 @@ void* vault() {
 
 void* guesser() {
     char start = '0';
-    lista guess = NULL;
-    guess = inserisci_testa(guess, start);
+    list guess = NULL;
+    guess = insert_head(guess, start);
     for (int h=0;h<TRIES;h++) {
         int found = -1;
         int reslen = 0;
         char* time = malloc(sizeof(char));
-        lista idx = guess;
+        list idx = guess;
         while(idx != NULL) {
             if(reslen == 0) {
                 globguess = malloc(sizeof(char));
@@ -150,11 +150,11 @@ void* guesser() {
             if (globres[i]=='(') {found = 0;}
         }
         if(atoi(time)==5) {
-            guess = inserisci_coda(guess, start);
+            guess = insert_tail(guess, start);
         }
         else if((atoi(time)-14)%9 == 0) {
             int correct = (atoi(time)-14)/9;
-            lista new = guess;
+            list new = guess;
             int count = 0;
             while (new != NULL) {
                 if(count >= correct) {
@@ -167,9 +167,9 @@ void* guesser() {
     }
 }
 
-int conta_lista (lista l) {
+int count_list (list l) {
     if (l != NULL) {
-        return 1 + conta_lista(l->next);
+        return 1 + count_list(l->next);
     }
     else {
         return 0;
