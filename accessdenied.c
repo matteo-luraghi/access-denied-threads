@@ -114,7 +114,6 @@ void* guesser() {
     char start = '0';
     lista guess = NULL;
     guess = inserisci_testa(guess, start);
-    //stampa_lista(guess);
     for (int h=0;h<TRIES;h++) {
         int found = -1;
         int reslen = 0;
@@ -133,12 +132,9 @@ void* guesser() {
         }
         globguess[reslen] = '\0';
         printf("GUESS: %s\n",globguess);
-        //stampa_lista(guess);
         sem_post(&stop);
         sem_wait(&go);
-        //scanf("%[^\n]%*c",res);
         if(strcmp(globres, "ACCESS GRANTED")==0) {return NULL;}
-        //reading the time in the ACCESS DENIED
         for(int i=0;i<strlen(globres) && found!=-2;i++) {
             if (found>=0) {
                 if(globres[i] == ' ') {
