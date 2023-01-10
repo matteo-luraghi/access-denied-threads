@@ -4,12 +4,16 @@
 #include<semaphore.h>
 #include<string.h>
 
+//semaphores to control the threads
 sem_t stop, go;
+
+//global variables
 char* globguess;
 char globres[20];
 int TRIES = 2500;
 char pssw1[20] = "Hunter2";
 
+//list initialization
 typedef char data;
 struct node {
     data el;
@@ -18,14 +22,15 @@ struct node {
 
 typedef struct node *list;
 
+//functions relative to the list data structure
 int length(list l);
 list insert_head (list l, data el);
 list insert_tail (list l, data el);
 void print_list (list l);
 int count_list (list l);
 
+//functions
 int updateChar(char charact);
-
 int checkPssw();
 void* vault();
 void* guesser();
@@ -42,11 +47,13 @@ int main() {
     return 0;
 }
 
+//returns the length of the lsit
 int length(list l) {
     if (l==NULL) { return 0;}
     else {return 1 + length (l->next);}
 }
 
+//inserts an element to as the new head of the list
 list insert_head (list l, data el) {
     struct node *temp = malloc(sizeof(struct node));
     temp->el = el;
@@ -54,6 +61,7 @@ list insert_head (list l, data el) {
     return temp;
 }
 
+//appends an element to the tail of the list
 list insert_tail (list l, data el) {
     if (l == NULL) {return insert_head(l,el);}
     else {
@@ -62,6 +70,7 @@ list insert_tail (list l, data el) {
     }
 }
 
+//prints the list
 void print_list (list l) {
     if(l != NULL) {
         printf("%c",l->el);
@@ -70,6 +79,7 @@ void print_list (list l) {
     else {printf("\n");}
 }
 
+//updates the current character to be an upper letter, a lower letter or a punctuation symbol
 int updateChar(char charact) {
     int num = (int) charact;
     if (num == 57){return 65;}
@@ -78,6 +88,7 @@ int updateChar(char charact) {
     return num+1;
 }
 
+//checks if the password is correct
 int checkPssw() {
     int time = 0;
     time = time + 4;
@@ -97,6 +108,7 @@ int checkPssw() {
     return 0;
 }
 
+//checks if the password is correct simulating the time constraints of the assignment (kattis problem)
 void* vault() {
     int tries = TRIES;
     int time = 1;
@@ -110,6 +122,7 @@ void* vault() {
     }
 }
 
+//checks the lenght of the password and then starts to guess the password updating the characters every time
 void* guesser() {
     char start = '0';
     list guess = NULL;
@@ -167,6 +180,7 @@ void* guesser() {
     }
 }
 
+//counts the elements inside a list
 int count_list (list l) {
     if (l != NULL) {
         return 1 + count_list(l->next);
